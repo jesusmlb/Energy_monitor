@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Energy Usage Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="chart"></div>
+    <script>
+        var data = [];
+        var layout = {
+            title: 'Real-Time Energy Usage Visualization',
+            xaxis: { title: 'UTC Timestamp' },
+            yaxis: { title: 'Energy Usage' }
+        };
+
+        function updateChart() {
+            $.getJSON('/data', function(new_data) {
+                var traces = [];
+                var columns = Object.keys(new_data[0]).filter(col => col !== 'utc_timestamp');
+
+                columns.forEach(function(col) {
+                    var trace = {
+                        x: new_data.map(d => d.utc_timestamp),
+                        y: new_data.map(d => d[col]),
+                        mode: 'lines',
+                        name: col
+                    };
+                    traces.push(trace);
+                });
+
+                Plotly.newPlot('chart', traces, layout);
+            });
+        }
+
+        setInterval(updateChart, 10000); // Update every 10 seconds
+
+        $(document).ready(function() {
+            updateChart(); // Initial load
+        });
+    </script>
+</body>
+</html>

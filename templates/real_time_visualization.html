@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Energy Usage Visualization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Real-Time Energy Usage Visualization</h1>
+    <div id="visualization">{{ visualization|safe }}</div>
+</body>
+</html>
